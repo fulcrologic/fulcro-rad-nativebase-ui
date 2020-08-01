@@ -1,5 +1,7 @@
 = Fulcro RAD NativeBase UI Rendering Plugin
 
+WARNING: THIS PLUGIN IS NOT COMPLETE AND DOES NOT WORK AT ALL. Please wait :)
+
 A plugin to render forms and reports in React Native using components from the NativeBase UI library.
 
 WARNING: This library is alpha.
