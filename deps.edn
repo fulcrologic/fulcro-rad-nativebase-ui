@@ -2,6 +2,5 @@
 
  :deps  {com.fulcrologic/fulcro-rad    {:mvn/version "0.0.15-alpha"}
          com.fulcrologic/fulcro-native {:mvn/version "0.0.8"}
-         com.fulcrologic/fulcro-i18n   {:mvn/version "0.0.4-alpha"}
          org.clojure/clojure           {:mvn/version "1.10.1" :scope "provided"}
          org.clojure/clojurescript     {:mvn/version "1.10.773" :scope "provided"}}}

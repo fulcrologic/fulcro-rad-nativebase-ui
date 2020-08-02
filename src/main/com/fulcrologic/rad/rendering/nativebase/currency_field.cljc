@@ -1,7 +1,5 @@
 (ns com.fulcrologic.rad.rendering.nativebase.currency-field
   (:require
-    [com.fulcrologic.fulcro.components :as comp]
-    [clojure.string :as str]
     [com.fulcrologic.rad.rendering.nativebase.field :refer [render-field-factory]]
     [com.fulcrologic.rad.type-support.decimal :as math]))
 

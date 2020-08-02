@@ -5,14 +5,12 @@
     [com.fulcrologic.rad.ui-validation :as validation]
     [com.fulcrologic.rad.form :as form]
     [com.fulcrologic.rad.control :as control]
-    [com.fulcrologic.fulcro-i18n.i18n :refer [tr]]
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
     [com.fulcrologic.fulcro.application :as app]
     [com.fulcrologic.fulcro.algorithms.form-state :as fs]
     [com.fulcrologic.fulcro.algorithms.tempid :as tempid]
     [com.fulcrologic.fulcro.algorithms.merge :as merge]
     [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
-    [taoensso.encore :as enc]
     [taoensso.timbre :as log]))
 
 (defn render-to-many [{::form/keys [form-instance] :as env} {k ::attr/qualified-key :as attr} {::form/keys [subforms] :as options}]

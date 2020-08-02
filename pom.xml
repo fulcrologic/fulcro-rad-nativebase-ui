@@ -71,17 +71,17 @@
     <dependency>
       <groupId>com.fulcrologic</groupId>
       <artifactId>fulcro-rad</artifactId>
-      <version>0.0.9-alpha</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fulcrologic</groupId>
-      <artifactId>fulcro-i18n</artifactId>
-      <version>0.0.3-alpha</version>
+      <version>0.0.15-alpha</version>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojurescript</artifactId>
       <version>1.10.773</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fulcrologic</groupId>
+      <artifactId>fulcro-native</artifactId>
+      <version>0.0.8</version>
     </dependency>
   </dependencies>
 </project>
