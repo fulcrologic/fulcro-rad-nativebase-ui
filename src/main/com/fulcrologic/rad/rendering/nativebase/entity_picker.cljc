@@ -1,7 +1,6 @@
 (ns com.fulcrologic.rad.rendering.nativebase.entity-picker
   (:require
-    #?(:cljs [com.fulcrologic.fulcro.dom :as dom :refer [div h3 button i span]]
-       :clj  [com.fulcrologic.fulcro.dom-server :as dom :refer [div h3 button i span]])
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
     [com.fulcrologic.rad.rendering.nativebase.components :refer [ui-wrapped-dropdown]]
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
     [com.fulcrologic.rad.form :as form]
@@ -35,17 +34,17 @@
         invalid?      (and (not read-only?) (validation/invalid-attribute-value? env attr))
         onSelect      (fn [v]
                         (form/input-changed! env qualified-key v))]
-    (div :.ui.field {:classes [(when invalid? "error")]}
-      (dom/label field-label (when invalid? " (Required)"))
-      (if read-only?
-        (let [value (first (filter #(= value (:value %)) options))]
-          (:text value))
-        (ui-wrapped-dropdown (cond->
-                               {:onChange  (fn [v] (onSelect v))
-                                :value     value
-                                :clearable (not required?)
-                                :disabled  read-only?
-                                :options   options}))))))
+    ;; TASK: validation
+    (if read-only?
+      (let [value (first (filter #(= value (:value %)) options))]
+        (:text value))
+      (ui-wrapped-dropdown (cond->
+                             {:onChange  (fn [v] (onSelect v))
+                              :label     field-label
+                              :value     value
+                              :clearable (not required?)
+                              :enabled   (not read-only?)
+                              :options   options})))))
 
 (let [ui-to-one-picker (comp/factory ToOnePicker {:keyfn (fn [{:keys [attr]}] (::attr/qualified-key attr))})]
   (defn to-one-picker [env attribute]
@@ -83,7 +82,8 @@
             invalid?           (validation/invalid-attribute-value? env attr)
             read-only?         (form/read-only? form-instance attr)
             validation-message (when invalid? (validation/validation-error-message env attr))]
-        (div :.ui.field {:classes [(when invalid? "error")]}
+        ;; TASK: to-many picker
+        #_(div :.ui.field {:classes [(when invalid? "error")]}
           (dom/label field-label " " (when invalid? validation-message))
           (div :.ui.middle.aligned.celled.list.big
             {:style {:marginTop "0"}}

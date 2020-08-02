@@ -1,12 +1,9 @@
 (ns com.fulcrologic.rad.rendering.nativebase.controls.boolean-control
   (:require
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
-    [com.fulcrologic.fulcro.ui-state-machines :as uism]
     [com.fulcrologic.rad.options-util :refer [?!]]
-    [com.fulcrologic.rad.report :as report]
     [taoensso.timbre :as log]
-    #?(:cljs [com.fulcrologic.fulcro.dom :as dom]
-       :clj  [com.fulcrologic.fulcro.dom-server :as dom])
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :refer [body list-item checkbox]]
     [com.fulcrologic.rad.control :as control]))
 
 (defsc BooleanControl [_ {:keys [instance control-key]}]
@@ -19,16 +16,14 @@
             visible?  (or (nil? visible?) (?! visible? instance))
             value     (control/current-value instance control-key)]
         (when visible?
-          (dom/div :.field
-            (dom/div :.ui.toggle.checkbox {:key (str control-key)}
-              (dom/input {:type     "checkbox"
-                          :readOnly (boolean disabled?)
-                          :onChange (fn [_]
-                                      (control/set-parameter! instance control-key (not value))
-                                      (when onChange
-                                        (onChange instance (not value))))
-                          :checked  (boolean value)})
-              (dom/label label)))))
+          (list-item {:key (str control-key)}
+            (checkbox {:checked (boolean value)
+                       :onPress (fn [_]
+                                  (when-not disabled?
+                                    (control/set-parameter! instance control-key (not value))
+                                    (when onChange
+                                      (onChange instance (not value)))))})
+            (body {} label))))
       (log/error "Could not find control definition for " control-key))))
 
 (def render-control (comp/factory BooleanControl {:keyfn :control-key}))

@@ -2,10 +2,10 @@
   "This ns requires all semantic UI renderers for form controls and includes a map that can be installed to
    set SUI as the default control set."
   (:require
-    [com.fulcrologic.rad.rendering.nativebase.form :as sui-form]
-    [com.fulcrologic.rad.rendering.nativebase.container :as sui-container]
+    [com.fulcrologic.rad.rendering.nativebase.form :as nb-form]
+    [com.fulcrologic.rad.rendering.nativebase.container :as nb-container]
     [com.fulcrologic.rad.rendering.nativebase.entity-picker :as entity-picker]
-    [com.fulcrologic.rad.rendering.nativebase.report :as sui-report]
+    [com.fulcrologic.rad.rendering.nativebase.report :as nb-report]
     [com.fulcrologic.rad.rendering.nativebase.boolean-field :as boolean-field]
     [com.fulcrologic.rad.rendering.nativebase.decimal-field :as decimal-field]
     [com.fulcrologic.rad.rendering.nativebase.int-field :as int-field]
@@ -16,7 +16,6 @@
     [com.fulcrologic.rad.rendering.nativebase.controls.pickers :as picker-controls]
     [com.fulcrologic.rad.rendering.nativebase.instant-field :as instant]
     [com.fulcrologic.rad.rendering.nativebase.enumerated-field :as enumerated-field]
-    [com.fulcrologic.rad.rendering.nativebase.blob-field :as blob-field]
     [com.fulcrologic.rad.rendering.nativebase.autocomplete :as autocomplete]
     [com.fulcrologic.rad.rendering.nativebase.text-field :as text-field]
     [com.fulcrologic.rad.rendering.nativebase.currency-field :as currency-field]))
@@ -26,23 +25,22 @@
    ;; completely configurable map...element types are malleable as are the styles. Plugins will need to doc where
    ;; they vary from the "standard" set.
    :com.fulcrologic.rad.form/element->style->layout
-   {:form-container      {:default      sui-form/standard-form-container
-                          :file-as-icon sui-form/file-icon-renderer}
-    :form-body-container {:default sui-form/standard-form-layout-renderer}
-    :ref-container       {:default sui-form/standard-ref-container
-                          :file    sui-form/file-ref-container}}
+   {:form-container      {:default nb-form/standard-form-container}
+    :form-body-container {:default nb-form/standard-form-layout-renderer}
+    :ref-container       {:default nb-form/standard-ref-container}}
 
    :com.fulcrologic.rad.form/type->style->control
    {:text    {:default text-field/render-field}
     :enum    {:default      enumerated-field/render-field
               :autocomplete autocomplete/render-autocomplete-field}
-    :string  {:default                              text-field/render-field
-              :multi-line                           text-field/render-multi-line
-              :autocomplete                         autocomplete/render-autocomplete-field
-              :viewable-password                    text-field/render-viewable-password
-              :password                             text-field/render-password
-              :sorted-set                           text-field/render-dropdown
-              :com.fulcrologic.rad.blob/file-upload blob-field/render-file-upload}
+    :string  {:default           text-field/render-field
+              :multi-line        text-field/render-multi-line
+              :autocomplete      autocomplete/render-autocomplete-field
+              :viewable-password text-field/render-viewable-password
+              :password          text-field/render-password
+              :sorted-set        text-field/render-dropdown
+              ;; TASK: figure out file upload, if we want it
+              #_#_:com.fulcrologic.rad.blob/file-upload blob-field/render-file-upload}
     :int     {:default int-field/render-field}
     :long    {:default int-field/render-field}
     :decimal {:default decimal-field/render-field
@@ -55,18 +53,16 @@
 
    ;; Report-related controls
    :com.fulcrologic.rad.report/style->layout
-   {:default sui-report/render-table-report-layout
-    :list    sui-report/render-list-report-layout}
+   {:default nb-report/render-list-report-layout}
 
    :com.fulcrologic.rad.report/control-style->control
-   {:default sui-report/render-standard-controls}
+   {:default nb-report/render-standard-controls}
 
    :com.fulcrologic.rad.report/row-style->row-layout
-   {:default sui-report/render-table-row
-    :list    sui-report/render-list-row}
+   {:default nb-report/render-list-row}
 
    :com.fulcrologic.rad.container/style->layout
-   {:default sui-container/render-container-layout}
+   {:default nb-container/render-container-layout}
 
    :com.fulcrologic.rad.control/type->style->control
    {:boolean {:toggle  boolean-input/render-control

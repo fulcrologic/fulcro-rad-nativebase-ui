@@ -1,10 +1,6 @@
 (ns com.fulcrologic.rad.rendering.nativebase.components
   (:require
-    #?@(:cljs
-        [[com.fulcrologic.fulcro.dom :as dom :refer [div label input]]
-         [com.fulcrologic.nativebase.modules.dropdown.ui-dropdown :refer [ui-dropdown]]]
-        :clj
-        [[com.fulcrologic.fulcro.dom-server :as dom :refer [div label input]]])
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
     [com.fulcrologic.fulcro.algorithms.transit :as ftransit]
     [taoensso.timbre :as log]))
@@ -56,13 +52,6 @@
            options      (get-options props)
            value        (format-value props value)
            props        (merge
-                          {:search             true
-                           :selection          true
-                           :closeOnBlur        true
-                           :openOnFocus        true
-                           :selectOnBlur       true
-                           :selectOnNavigation true
-                           :multiple           (boolean multiple)}
                           props
                           {:value    value
                            :options  options
@@ -76,13 +65,8 @@
                                              (userOnChange value)))
                                          (catch :default e
                                            (log/error "Unable to read dropdown value " e (when v (.-value v))))))})]
-       (ui-dropdown props))
-     :clj
-     (dom/div :.ui.selection.dropdown
-       (dom/input {:type "hidden"})
-       (dom/i :.dropdown.icon)
-       (dom/div :.default.text "")
-       (dom/div :.menu))))
+       ;; TASK: finish porting
+       (nbc/picker props))))
 
 (def ui-wrapped-dropdown
   "Draw a SUI dropdown with the given props.  The arguments are identical to sui/ui-dropdown, but options and onChange

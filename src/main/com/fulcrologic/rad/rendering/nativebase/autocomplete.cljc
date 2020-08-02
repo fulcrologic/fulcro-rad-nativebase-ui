@@ -1,12 +1,8 @@
 (ns com.fulcrologic.rad.rendering.nativebase.autocomplete
   (:require
     #?@(:cljs
-        [[com.fulcrologic.fulcro.dom :as dom :refer [div label input]]
-         [goog.object :as gobj]
-         [cljs.reader :refer [read-string]]
-         [com.fulcrologic.nativebase.modules.dropdown.ui-dropdown :refer [ui-dropdown]]]
-        :clj
-        [[com.fulcrologic.fulcro.dom-server :as dom :refer [div label input]]])
+        [[goog.object :as gobj]
+         [cljs.reader :refer [read-string]]])
     [com.fulcrologic.rad.ids :as ids]
     [com.fulcrologic.rad.ui-validation :as validation]
     [com.fulcrologic.fulcro.rendering.multiple-roots-renderer :as mroot]
@@ -15,12 +11,11 @@
     [com.fulcrologic.fulcro.mutations :as m :refer [defmutation]]
     [com.fulcrologic.fulcro.algorithms.merge :as merge]
     [com.fulcrologic.rad.options-util :as opts]
-    [com.fulcrologic.rad.rendering.nativebase.components :refer [ui-wrapped-dropdown]]
     [com.fulcrologic.rad.attributes :as attr]
-    [clojure.string :as str]
     [taoensso.timbre :as log]
     [com.fulcrologic.rad.form :as form]
-    [com.fulcrologic.fulcro.algorithms.normalized-state :as fns]))
+    [com.fulcrologic.fulcro.algorithms.normalized-state :as fns]
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]))
 
 (defsc AutocompleteQuery [_ _] {:query [:text :value]})
 
@@ -70,28 +65,18 @@
                        :autocomplete/debounce-ms :autocomplete/minimum-input]
    :ident             ::autocomplete-id}
   (let [load! (comp/get-state this :load!)]
-    #?(:clj
-       (dom/div "")
-       :cljs
-       (dom/div :.field {:classes [(when invalid? "error")]}
-         (dom/label label (when invalid? (str " " validation-message)))
-         (if read-only?
-           (gobj/getValueByKeys options 0 "text")
-           (ui-dropdown #js {:search             true
-                             :options            (if options options #js [])
-                             :value              (pr-str value)
-                             :selection          true
-                             :closeOnBlur        true
-                             :openOnFocus        true
-                             :selectOnBlur       true
-                             :selectOnNavigation true
-                             :onSearchChange     (fn [_ v]
-                                                   (let [query (comp/isoget v "searchQuery")]
-                                                     (load! query)))
-                             :onChange           (fn [_ v]
-                                                   (when onChange
-                                                     (onChange (some-> (comp/isoget v "value")
-                                                                 read-string))))}))))))
+    #?(:cljs
+       ;; TASK: Finish porting...
+       (nbc/picker #js {:placeholder    label
+                        :options        (if options options #js [])
+                        :value          (pr-str value)
+                        :onSearchChange (fn [_ v]
+                                          (let [query (comp/isoget v "searchQuery")]
+                                            (load! query)))
+                        :onChange       (fn [_ v]
+                                          (when onChange
+                                            (onChange (some-> (comp/isoget v "value")
+                                                        read-string))))}))))
 
 (def ui-autocomplete-field (comp/computed-factory AutocompleteField {:keyfn ::autocomplete-id}))
 

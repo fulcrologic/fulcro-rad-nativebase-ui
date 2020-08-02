@@ -1,29 +1,22 @@
 (ns com.fulcrologic.rad.rendering.nativebase.instant-field
   (:require
-    [clojure.string :as str]
-    [com.fulcrologic.fulcro.components :as comp]
-    #?(:cljs [com.fulcrologic.fulcro.dom :refer [div label input]]
-       :clj  [com.fulcrologic.fulcro.dom-server :refer [div label input]])
-    [com.fulcrologic.fulcro.dom.inputs :as inputs]
-    [taoensso.timbre :as log]
-    [com.fulcrologic.rad.type-support.date-time :as datetime]
     [com.fulcrologic.rad.rendering.nativebase.field :refer [render-field-factory]]))
 
 (def ui-datetime-input
-  (comp/factory (inputs/StringBufferedInput ::DateTimeInput
-                  {:model->string (fn [tm]
-                                    (if tm
-                                      (datetime/inst->html-datetime-string tm)
-                                      ""))
-                   :string->model (fn [s] (some-> s (datetime/html-datetime-string->inst)))})))
+  #_(comp/factory (inputs/StringBufferedInput ::DateTimeInput
+                    {:model->string (fn [tm]
+                                      (if tm
+                                        (datetime/inst->html-datetime-string tm)
+                                        ""))
+                     :string->model (fn [s] (some-> s (datetime/html-datetime-string->inst)))})))
 
 (def ui-date-noon-input
-  (comp/factory (inputs/StringBufferedInput ::DateTimeInput
-                  {:model->string (fn [tm]
-                                    (if tm
-                                      (str/replace (datetime/inst->html-datetime-string tm) #"T.*$" "")
-                                      ""))
-                   :string->model (fn [s] (some-> s (str "T12:00") (datetime/html-datetime-string->inst)))})))
+  #_(comp/factory (inputs/StringBufferedInput ::DateTimeInput
+                    {:model->string (fn [tm]
+                                      (if tm
+                                        (str/replace (datetime/inst->html-datetime-string tm) #"T.*$" "")
+                                        ""))
+                     :string->model (fn [s] (some-> s (str "T12:00") (datetime/html-datetime-string->inst)))})))
 
 (def render-field
   "Uses current timezone and gathers date/time."

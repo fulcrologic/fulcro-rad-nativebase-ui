@@ -1,13 +1,10 @@
 (ns com.fulcrologic.rad.rendering.nativebase.controls.control
   (:require
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
-    [com.fulcrologic.fulcro.ui-state-machines :as uism]
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
     [com.fulcrologic.rad.options-util :refer [?!]]
     [com.fulcrologic.guardrails.core :refer [>defn =>]]
-    [com.fulcrologic.rad.report :as report]
     [com.fulcrologic.rad.control :as control]
-    #?(:cljs [com.fulcrologic.fulcro.dom :as dom]
-       :clj  [com.fulcrologic.fulcro.dom-server :as dom])
     [taoensso.timbre :as log]))
 
 (defsc Control [_ {:keys [instance control control-key input-factory] :as report-env}]
@@ -26,12 +23,12 @@
                         (when action
                           (action instance)))]
         (when visible?
-          (dom/div :.ui.field {:key (str control-key)}
-            (dom/label label)
+          (nbc/item {}
             (input-factory report-env (merge user-props
-                                        {:disabled? disabled?
-                                         :value     value
-                                         :onChange  onChange})))))
+                                        {:editable    (not disabled?)
+                                         :placeholder label
+                                         :value       value
+                                         :onChange    onChange})))))
       (log/error "Cannot render control. Missing input factory or control definition."))))
 
 (def ui-control (comp/factory Control {:keyfn :control-key}))

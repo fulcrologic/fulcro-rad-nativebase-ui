@@ -1,13 +1,12 @@
 (ns com.fulcrologic.rad.rendering.nativebase.controls.pickers
   (:require
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
     [com.fulcrologic.rad.picker-options :as po]
     [com.fulcrologic.rad.control :as control]
     [com.fulcrologic.rad.rendering.nativebase.components :refer [ui-wrapped-dropdown]]
     [com.fulcrologic.rad.options-util :refer [?!]]
-    [taoensso.timbre :as log]
-    #?(:cljs [com.fulcrologic.fulcro.dom :as dom]
-       :clj  [com.fulcrologic.fulcro.dom-server :as dom])))
+    [taoensso.timbre :as log]))
 
 (defsc SimplePicker [_ {:keys [instance control-key]}]
   {:shouldComponentUpdate (fn [_ _ _] true)
@@ -29,21 +28,20 @@
             visible?    (or (nil? visible?) (?! visible? instance))
             value       (control/current-value instance control-key)]
         (when visible?
-          (dom/div :.ui.field {:key (str control-key)}
-            (dom/label label)
-            (ui-wrapped-dropdown (merge
-                                   user-props
-                                   {:disabled    disabled?
-                                    :placeholder (str placeholder)
-                                    :options     options
-                                    :value       value
-                                    :onChange    (fn [v]
-                                                   (control/set-parameter! instance control-key v)
-                                                   (binding [comp/*after-render* true]
-                                                     (when onChange
-                                                       (onChange instance v))
-                                                     (when action
-                                                       (action instance))))}))))))))
+          (ui-wrapped-dropdown (merge
+                                 user-props
+                                 {:disabled    disabled?
+                                  :label       label
+                                  :placeholder (str placeholder)
+                                  :options     options
+                                  :value       value
+                                  :onChange    (fn [v]
+                                                 (control/set-parameter! instance control-key v)
+                                                 (binding [comp/*after-render* true]
+                                                   (when onChange
+                                                     (onChange instance v))
+                                                   (when action
+                                                     (action instance))))})))))))
 
 (def render-control (comp/factory SimplePicker {:keyfn :control-key}))
 

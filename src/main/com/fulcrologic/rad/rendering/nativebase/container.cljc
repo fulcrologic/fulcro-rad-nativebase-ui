@@ -1,21 +1,18 @@
 (ns com.fulcrologic.rad.rendering.nativebase.container
   (:require
-    #?@(:cljs
-        [[com.fulcrologic.fulcro.dom :as dom :refer [div]]]
-        :clj
-        [[com.fulcrologic.fulcro.dom-server :as dom :refer [div]]])
+    [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
     [com.fulcrologic.fulcro.components :as comp]
     [com.fulcrologic.rad.container :as container]
     [com.fulcrologic.rad.control :as control]
     [com.fulcrologic.rad.options-util :refer [?!]]
-    [com.fulcrologic.rad.rendering.nativebase.form :as sui-form]
+    [com.fulcrologic.rad.rendering.nativebase.form :as nbc-form]
     [taoensso.timbre :as log]))
 
 (comp/defsc StandardContainerControls [_ {:keys [instance]}]
   {:shouldComponentUpdate (fn [_ _ _] true)}
   (let [controls (control/component-controls instance)
         {:keys [input-layout action-layout]} (control/standard-control-layout instance)]
-    (div :.ui.top.attached.compact.basic.segment
+    #_(div :.ui.top.attached.compact.basic.segment
       (dom/h3 :.ui.header
         (or (some-> instance comp/component-options ::container/title (?! instance)) "")
         (div :.ui.right.floated.buttons
@@ -23,7 +20,7 @@
       (div :.ui.form
         (map-indexed
           (fn [idx row]
-            (div {:key idx :className (sui-form/n-fields-string (count row))}
+            (div {:key idx :className (nbc-form/n-fields-string (count row))}
               (map #(if-let [c (get controls %)]
                       (control/render-control instance % c)
                       (dom/div :.ui.field {:key (str %)} "")) row)))
@@ -33,24 +30,6 @@
   (defn render-standard-controls [instance]
     (ui-standard-container-controls {:instance instance})))
 
-(def n-string {0  "zero"
-               1  "one"
-               2  "two"
-               3  "three"
-               4  "four"
-               5  "five"
-               6  "six"
-               7  "seven"
-               8  "eight"
-               9  "nine"
-               10 "ten"
-               11 "eleven"
-               12 "twelve"
-               13 "thirteen"
-               14 "fourteen"
-               15 "fifteen"
-               16 "sixteen"})
-
 (defn render-container-layout [container-instance]
   (let [{::container/keys [children layout]} (comp/component-options container-instance)]
     ;; TODO: Custom controls rendering as a separate config?
@@ -59,7 +38,7 @@
                             (let [factory (comp/computed-factory cls)
                                   props   (get container-props id {})]
                               (factory props {::container/controlled? true})))]
-      (dom/div :.ui.basic.segments
+      #_(dom/div :.ui.basic.segments
         (render-standard-controls container-instance)
         (dom/div :.ui.basic.segment
           (if layout
