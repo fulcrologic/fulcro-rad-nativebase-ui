@@ -75,4 +75,3 @@
               :date-at-noon  instant-input/date-at-noon-control}
     :picker  {:default picker-controls/render-control}
     :button  {:default action-button/render-control}}})
-
