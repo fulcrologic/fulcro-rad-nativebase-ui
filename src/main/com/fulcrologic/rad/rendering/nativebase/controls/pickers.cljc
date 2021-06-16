@@ -2,6 +2,7 @@
   (:require
     [com.fulcrologic.rad.rendering.nativebase.raw-controls :as nbc]
     [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
+    [com.fulcrologic.fulcro.raw.components :as rc]
     [com.fulcrologic.rad.picker-options :as po]
     [com.fulcrologic.rad.control :as control]
     [com.fulcrologic.rad.rendering.nativebase.components :refer [ui-wrapped-dropdown]]
@@ -37,7 +38,7 @@
                                   :value       value
                                   :onChange    (fn [v]
                                                  (control/set-parameter! instance control-key v)
-                                                 (binding [comp/*after-render* true]
+                                                 (binding [rc/*after-render* true]
                                                    (when onChange
                                                      (onChange instance v))
                                                    (when action
